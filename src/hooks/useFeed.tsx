@@ -263,8 +263,12 @@ const useFeed = (params?: Params) => {
     return returnData;
   };
 
+  console.log("key in useFeed", key);
+
+  const queryKey = key[0] === "" ?  ["feed"] : key;
+  console.log("queryKey in useFeed", queryKey);
   const feed = useInfiniteQuery({
-    queryKey: ['feed'],
+    queryKey,
     queryFn: (pageParam ) => fetchFeed(pageParam),
     initialPageParam: {
       filtered: 'asdf',
