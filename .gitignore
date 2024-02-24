@@ -4,7 +4,6 @@
 /node_modules
 /.pnp
 .pnp.js
-.yarn/install-state.gz
 
 # testing
 /coverage
@@ -19,6 +18,8 @@
 # misc
 .DS_Store
 *.pem
+.secrets
+settings.json
 
 # debug
 npm-debug.log*
@@ -26,11 +27,26 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # vercel
 .vercel
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+#pwa
+**/public/precache.*.*.js
+**/public/sw.js
+**/public/workbox-*.js
+**/public/worker-*.js
+**/public/fallback-*.js
+**/public/precache.*.*.js.map
+**/public/sw.js.map
+**/public/workbox-*.js.map
+**/public/worker-*.js.map
+**/public/fallback-*.js
+
+#other
+.secrets
+
