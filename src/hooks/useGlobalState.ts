@@ -19,17 +19,22 @@ const useGlobalState = (globalKey: string[], cacheTime=Infinity) => {
   const createGlobalState = () => {
     const prev = getGlobalData();
     if (prev === undefined) {
-      queryClient.fetchQuery(globalKey, () => new Map(), {
+      queryClient.fetchQuery({
+        queryFn: () => new Map(),
         staleTime: 0,
-        cacheTime: cacheTime,
-      });
+        queryKey: globalKey,
+        gcTime: cacheTime
+      })
     }
   };
   const clearGlobalState = () => {
-    queryClient.fetchQuery(globalKey, () => new Map(), {
+
+    queryClient.fetchQuery({
+      queryFn: () => new Map(),
       staleTime: 0,
-      cacheTime: cacheTime,
-    });
+      queryKey: globalKey,
+      gcTime: cacheTime
+    })
   };
   const getGlobalKey = () => {
     return globalKey;

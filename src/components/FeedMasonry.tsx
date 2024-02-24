@@ -209,7 +209,7 @@ const FeedMasonry = ({ initItems, feed, curKey }: MyMasonicProps) => {
   );
 
   const handleIntersectChange = useCallback(
-    (inView: boolean, entry: IntersectionObserverEntry, post) => {
+    (inView: boolean, entry, post) => {
       if (
         entry.intersectionRect?.x === 0 &&
         !inView &&
@@ -248,6 +248,7 @@ const FeedMasonry = ({ initItems, feed, curKey }: MyMasonicProps) => {
 
       //for mobile
       if (windowWidth < 525) {
+        // @ts-ignore
         windowHeightToUse = window.screen.height;
       }
 
@@ -416,7 +417,7 @@ const FeedMasonry = ({ initItems, feed, curKey }: MyMasonicProps) => {
       )}
       <div className={"min-h-screen w-full"}>
         <MasonryScroller
-          itemKey={(data, index) => {
+          itemKey={(data: Item, index) => {
             return data?.data?.name ?? index;
           }}
           key={masonicKey}

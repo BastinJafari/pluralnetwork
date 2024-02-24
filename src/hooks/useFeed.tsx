@@ -20,8 +20,8 @@ interface Params {
 }
 
 const useFeed = (params?: Params) => {
-  const { data: session, status } = useSession();
-  const { isLoaded, premium } = useTAuth();
+  const {data: session, status} = useSession();
+  const {isLoaded, premium} = useTAuth();
   const sessloading = status === "loading";
   const context: any = useMainContext();
 
@@ -52,11 +52,11 @@ const useFeed = (params?: Params) => {
     filters: object;
   }
 
-  const fetchFeed = async (fetchParams: QueryFunctionContext) => {
+  const fetchFeed = async (fetchParams) => {
     const feedParams = {
       loggedIn: status === "authenticated" ? true : false,
-      after: fetchParams.pageParam?.after ?? "",
-      count: fetchParams.pageParam?.count ?? 0,
+      after: fetchParams.pageParam.after,
+      count: fetchParams.pageParam.count ?? 0,
       mode: mode,
       sort: sort,
       range: range,
@@ -74,8 +74,8 @@ const useFeed = (params?: Params) => {
     //short circuiting with initialData here instead of using param in infinite query hook..
     try {
       if (
-        params?.initialPosts?.children?.length > 0 &&
-        fetchParams?.pageParam === undefined
+          params?.initialPosts?.children?.length > 0 &&
+          fetchParams?.pageParam === undefined
       ) {
         data = params?.initialPosts;
         data["after"] = "";
@@ -108,7 +108,7 @@ const useFeed = (params?: Params) => {
           range: feedParams.range,
           count: feedParams.count,
           sort: feedParams.sort,
-          params: { q: feedParams.searchQuery },
+          params: {q: feedParams.searchQuery},
           include_over_18: feedParams.safeSearch,
           subreddit: feedParams.subreddits,
           token: context?.token,
@@ -121,7 +121,7 @@ const useFeed = (params?: Params) => {
           range: feedParams.range,
           count: feedParams.count,
           sort: feedParams.sort,
-          params: { q: feedParams.searchQuery },
+          params: {q: feedParams.searchQuery},
           include_over_18: feedParams.safeSearch,
           subreddit: undefined,
           token: context?.token,
@@ -161,7 +161,7 @@ const useFeed = (params?: Params) => {
           isPremium: premium?.isPremium,
         });
       }
-      
+
     } catch (error) {
       if (error?.message === "PREMIUM REQUIRED") {
         context.setPremiumModal(true);
@@ -175,15 +175,15 @@ const useFeed = (params?: Params) => {
       } else if (error?.["response"]?.["status"] === 429 || true) {
         //rate limited
         const timeout = parseInt(
-          error?.["response"]?.["headers"]?.["x-ratelimit-reset"] ?? "300"
+            error?.["response"]?.["headers"]?.["x-ratelimit-reset"] ?? "300"
         );
         context.setRateLimitModal({
-          show: true, 
+          show: true,
           timeout,
           start: new Date()
         });
         await new Promise((resolve) =>
-          setTimeout(() => resolve("foo"), timeout * 1000)
+            setTimeout(() => resolve("foo"), timeout * 1000)
         );
         return {
           filtered: [],
@@ -197,20 +197,20 @@ const useFeed = (params?: Params) => {
     }
 
     const manageData = async (
-      data: any,
-      filters,
-      prevPosts,
-      filterSubs: boolean
+        data: any,
+        filters,
+        prevPosts,
+        filterSubs: boolean
     ) => {
       data?.token && context.setToken(data?.token);
 
-      const { filtered, filtercount } = await filterPosts(
-        data?.children,
-        filters,
-        prevPosts,
-        filterSubs,
-        feedParams.mode === "USER" ? false : true,
-        domain
+      const {filtered, filtercount} = await filterPosts(
+          data?.children,
+          filters,
+          prevPosts,
+          filterSubs,
+          feedParams.mode === "USER" ? false : true,
+          domain
       );
 
       return {
@@ -220,32 +220,32 @@ const useFeed = (params?: Params) => {
     };
 
     const filterSubs =
-      mode === "HOME" ||
-      feedParams.subreddits
-        ?.split(" ")
-        ?.join("+")
-        ?.split(",")
-        ?.join("+")
-        ?.split("%20")
-        ?.join("+")
-        ?.split("+")?.length > 1 ||
-      feedParams.subreddits?.toUpperCase() == "ALL" ||
-      feedParams.subreddits?.toUpperCase() == "POPULAR";
+        mode === "HOME" ||
+        feedParams.subreddits
+            ?.split(" ")
+            ?.join("+")
+            ?.split(",")
+            ?.join("+")
+            ?.split("%20")
+            ?.join("+")
+            ?.split("+")?.length > 1 ||
+        feedParams.subreddits?.toUpperCase() == "ALL" ||
+        feedParams.subreddits?.toUpperCase() == "POPULAR";
 
-    const { filtered, filtercount } = await manageData(
-      data,
-      feedParams.filters,
-      feedParams.prevPosts,
-      filterSubs
+    const {filtered, filtercount} = await manageData(
+        data,
+        feedParams.filters,
+        feedParams.prevPosts,
+        filterSubs
     );
 
     let returnData = {
       filtered,
       after: data.after,
       count:
-        fetchParams?.pageParam === undefined
-          ? 0
-          : feedParams.count + data?.children?.length,
+          fetchParams?.pageParam === undefined
+              ? 0
+              : feedParams.count + data?.children?.length,
       prevPosts: {
         ...feedParams.prevPosts,
         ...filtered.reduce((obj, post, index) => {
@@ -261,24 +261,44 @@ const useFeed = (params?: Params) => {
     return returnData;
   };
 
-  const feed = useInfiniteQuery(key, fetchFeed, {
-    enabled: isLoaded && ready && key?.[0] == "feed" && !!domain,
-    refetchOnWindowFocus:
-      (premium?.isPremium && context?.refreshOnFocus) ?? true ? true : false,
-    refetchOnMount: false,
-    staleTime: 0,
-    cacheTime: Infinity,
-    refetchInterval: premium?.isPremium
-      ? Infinity
-      : context?.autoRefreshFeed
-      ? sort === "new" || sort === "rising"
-        ? context?.fastRefreshInterval ?? 10 * 1000
-        : context?.slowRefreshInterval ?? 30 * 60 * 1000
-      : Infinity,
+  const feed = useInfiniteQuery({
+    queryKey: ['feed'],
+    queryFn: (pageParam ) => fetchFeed(pageParam),
+    initialPageParam: {
+      filtered: 'asdf',
+      filterCount: 0,
+      after:  "",
+      count: 0,
+      prevPosts:  {},
+    } ,
+    ...{
+      enabled: isLoaded && ready && key?.[0] == "feed" && !!domain,
+      refetchOnWindowFocus:
+          (premium?.isPremium && context?.refreshOnFocus) ?? true ? true : false,
+      refetchOnMount: false,
+      staleTime: 0,
+      cacheTime: Infinity,
+      refetchInterval: premium?.isPremium
+          ? Infinity
+          : context?.autoRefreshFeed
+              ? sort === "new" || sort === "rising"
+                  ? context?.fastRefreshInterval ?? 10 * 1000
+                  : context?.slowRefreshInterval ?? 30 * 60 * 1000
+              : Infinity
+
+
+
+      // setting initial data directly in fetchFeed() instead
+      // initialData: () => {
+      //   return formatInitialData();
+      // },
+    },
     getNextPageParam: (lastPage) => {
       //console.log('lastPage?ß', lastPage)
       if (lastPage.after || lastPage.after === "") {
         return {
+          filtered: lastPage.filtered,
+          filterCount: lastPage.filterCount ?? 0,
           after: lastPage?.after ?? "",
           count: lastPage?.count ?? 0,
           prevPosts: lastPage?.prevPosts ?? {},
@@ -286,11 +306,6 @@ const useFeed = (params?: Params) => {
       }
       return undefined;
     },
-
-    // setting initial data directly in fetchFeed() instead
-    // initialData: () => {
-    //   return formatInitialData();
-    // },
   });
 
   return {
