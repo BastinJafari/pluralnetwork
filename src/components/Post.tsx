@@ -22,6 +22,7 @@ const Post = ({
   handleSizeChange,
   initHeight = 0,
 }) => {
+  console.log("post", post);
   const { data: session, status } = useSession();
   const router = useRouter();
   const postCardRef = useRef<HTMLDivElement>(null);

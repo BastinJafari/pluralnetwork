@@ -21,6 +21,8 @@ interface Params {
 
 const useFeed = (params?: Params) => {
   const {data: session, status} = useSession();
+  console.log("session in useFeed", session);
+  console.log("status in useFeed", status);
   const {isLoaded, premium} = useTAuth();
   const sessloading = status === "loading";
   const context: any = useMainContext();

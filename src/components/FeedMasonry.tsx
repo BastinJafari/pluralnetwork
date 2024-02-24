@@ -38,6 +38,7 @@ interface MyMasonicProps {
 }
 
 const FeedMasonry = ({ initItems, feed, curKey }: MyMasonicProps) => {
+  console.log("feed", feed);
   const [masonicKey, setMasonicKey] = useState(curKey);
   const [cols, setCols] = useState<number>();
   const [uniformMediaMode, setUniformMediaMode] = useState(false);

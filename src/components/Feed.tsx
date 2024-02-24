@@ -18,6 +18,8 @@ const Feed = ({ initialData = {} as any }) => {
   const { key, feed } = useFeed({
     initialPosts: initialData,
   });
+
+    console.log("Feed in Feed.tsx", feed);
   const { invalidateAll, invalidateKey, refreshCurrent, fetchingCount } =
     useRefresh();
 
