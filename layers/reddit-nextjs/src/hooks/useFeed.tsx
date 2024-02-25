@@ -35,10 +35,6 @@ const useFeed = (params: useFeedParams) => {
     searchQuery,
     domain,
   } = useLocation(params);
-  console.log('parameter subReddit', params?.subReddit)
-  console.log("key in useFeed", key);
-  console.log("ready in useFeed", ready);
-  console.log("mode in useFeed", mode);
 
   interface FeedParams {
     loggedIn: boolean;
@@ -71,7 +67,6 @@ const useFeed = (params: useFeedParams) => {
       prevPosts: fetchParams.pageParam?.prevPosts ?? {},
       filters: fetchParams?.queryKey?.[fetchParams?.queryKey?.length - 1],
     };
-    console.log('FEEDPARAMS IN FETCHFEED 2', feedParams)
     //console.log("fetchParams?", fetchParams);
     //console.log("feedParms", feedParams);
 
@@ -97,7 +92,6 @@ const useFeed = (params: useFeedParams) => {
           isPremium: premium?.isPremium,
         });
       } else if (mode === "SUBREDDIT") {
-        console.log('Subreddit mode in useFeed')
         data = await loadSubreddits({
           after: feedParams.after,
           range: feedParams.range,
@@ -267,14 +261,7 @@ const useFeed = (params: useFeedParams) => {
     //console.log("returnData?", returnData);
 
     return returnData;
-  };
-  console.log('key in front of useInfiniteQuery', key)
-  console.log('isLoaded', isLoaded)
-  console.log('ready', ready)
-  console.log('key?.[0]', key?.[0])
-  console.log('domain', domain)
-
-  console.log('enabled?', isLoaded && ready && key?.[0] == "feed" && !!domain)
+  }
   const feed = useInfiniteQuery({
     queryKey: key,
     queryFn: (pageParam) => fetchFeed(pageParam),
@@ -306,7 +293,6 @@ const useFeed = (params: useFeedParams) => {
       return undefined;
     },
   });
-  console.log('feed et the end of useFeed', feed)
   return {
     key,
     feed,

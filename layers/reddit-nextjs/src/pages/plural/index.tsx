@@ -7,9 +7,7 @@ export const PluralFrontPage = () => {
     subReddit: 'plural_network_test',
   });
 
-
-  console.log('key in index', key);
-  console.log('feed in index', feed);
+  
   return (
     <>
       <h1 className={'text-2xl'}>Plural Network</h1>

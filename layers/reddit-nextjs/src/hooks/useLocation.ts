@@ -173,8 +173,6 @@ const useLocation = (params: useFeedParams) => {
   //monitor keys to control query
   const [key, setKey] = useState<any[]>(["none"]);
   useEffect(() => {
-    console.log('useEffect triggered')
-    console.log('subReddit', subReddit)
     const {
       seenFilter,
       readFilter,
@@ -201,7 +199,6 @@ const useLocation = (params: useFeedParams) => {
     ].join(",");
     const sessStatus = status === "authenticated" ? session.user?.name : status
     if (subReddit !== undefined) {
-      console.log('params.subReddit', params.subReddit)
       setKey(["feed", "SUBREDDIT", params.subReddit, "hot", "", sessStatus, filtersString, filters]);
 
       setReady(true);
@@ -221,7 +218,6 @@ const useLocation = (params: useFeedParams) => {
       //console.log("SAFESEARCH?", params?.safeSearch);
       //console.log("FILTERS??", filters);
 
-      console.log('mode', mode)
 
       if (mode === "MULTI") {
         setKey([

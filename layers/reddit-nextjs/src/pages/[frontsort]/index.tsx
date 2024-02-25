@@ -9,6 +9,7 @@ import { loadPost } from "../../RedditAPI";
 import { findMediaInfo } from "../../../lib/utils";
 
 const FrontSortPage = ({ query, metaTags, post }) => {
+  console.log('FrontSortPage')
   return (
     <div>
       <Head>
@@ -16,12 +17,12 @@ const FrontSortPage = ({ query, metaTags, post }) => {
           {metaTags?.ogTitle
             ? `troddit · ${metaTags?.ogTitle}`
             : query?.frontsort
-            ? `troddit · ${query?.frontsort}`
-            : "troddit"}
+              ? `troddit · ${query?.frontsort}`
+              : "troddit"}
         </title>
         {metaTags?.ogSiteName && (
           <>
-            <meta property="og:site_name" content={metaTags?.ogSiteName} />
+            <meta property="og:site_name" content={metaTags?.ogSiteName}/>
             {metaTags?.ogDescription && (
               <meta
                 property="og:description"
@@ -29,19 +30,19 @@ const FrontSortPage = ({ query, metaTags, post }) => {
               />
             )}
             {metaTags?.ogTitle && (
-              <meta property="og:title" content={metaTags?.ogTitle} />
+              <meta property="og:title" content={metaTags?.ogTitle}/>
             )}
             {metaTags?.ogImage && (
-              <meta property="og:image" content={metaTags?.ogImage} />
+              <meta property="og:image" content={metaTags?.ogImage}/>
             )}
             {metaTags?.ogHeight && (
-              <meta property="og:image:height" content={metaTags?.ogHeight} />
+              <meta property="og:image:height" content={metaTags?.ogHeight}/>
             )}
             {metaTags?.ogWidth && (
-              <meta property="og:image:width" content={metaTags?.ogWidth} />
+              <meta property="og:image:width" content={metaTags?.ogWidth}/>
             )}
             {metaTags?.ogType && (
-              <meta property="og:type" content={metaTags?.ogType} />
+              <meta property="og:type" content={metaTags?.ogType}/>
             )}
           </>
         )}
@@ -54,16 +55,17 @@ const FrontSortPage = ({ query, metaTags, post }) => {
         query.frontsort === "top" ||
         query.frontsort === "rising" ? (
           <>
-            <Feed />
+            <Feed/>
           </>
         ) : (
           <>
             <div className="mt-10">
-              <LoginModal />
+              <LoginModal/>
               <PostModal
                 permalink={`/${query?.frontsort}`}
                 returnRoute={query?.slug?.[0] ? `/r/${query?.slug[0]}` : "/"}
-                setSelect={() => {}}
+                setSelect={() => {
+                }}
                 direct={true}
                 curKey={undefined}
                 postNum={undefined}
