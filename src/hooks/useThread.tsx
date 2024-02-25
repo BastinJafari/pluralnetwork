@@ -139,7 +139,7 @@ const useThread = (permalink, sort, initialData?, withContext = false) => {
     return comments;
   };
 
-  const fetchThread = async (feedParams: QueryFunctionContext) => {
+  const fetchThread = async (feedParams) => {
     try {
       if (feedParams?.pageParam?.children?.length > 0) {
         const { post_comments, token } = await loadChildComments(
@@ -184,12 +184,14 @@ const useThread = (permalink, sort, initialData?, withContext = false) => {
   };
 
   const thread = useInfiniteQuery(
-    ["thread", threadId, sort, commentId, withContext, session?.user?.name],
-    fetchThread,
     {
-      enabled: isLoaded && threadId && !loading,
-      staleTime: context?.autoRefreshComments ? 0 : Infinity, // 5 * 60 * 1000, //5 min
-      getNextPageParam: (lastpage: any) => {
+      queryKey: ["thread", threadId, sort, commentId, withContext, session?.user?.name],
+      queryFn: fetchThread,
+      initialPageParam: {
+        children: [],
+        link_id: "",
+      },
+      getNextPageParam: (lastpage) => {
         const lastComment =
           lastpage?.comments?.[lastpage?.comments?.length - 1];
         if (lastComment?.kind === "more") {
@@ -199,6 +201,9 @@ const useThread = (permalink, sort, initialData?, withContext = false) => {
           };
         } else return undefined;
       },
+      enabled: isLoaded && threadId && !loading,
+      staleTime: context?.autoRefreshComments ? 0 : Infinity, // 5 * 60 * 1000, //5 min
+
     }
   );
 

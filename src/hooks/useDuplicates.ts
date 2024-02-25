@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {useTAuth} from "../PremiumAuthContext"; 
+import { useTAuth } from "../PremiumAuthContext";
 import { useMainContext } from "../MainContext";
 import { useSession } from "next-auth/react";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
@@ -7,7 +7,7 @@ import { findDuplicates } from "../RedditAPI";
 import { findMediaInfo } from "../../lib/utils";
 
 const useDuplicates = ({ enabled, permalink }) => {
-  const {premium} = useTAuth(); 
+  const { premium } = useTAuth();
   const { data: session, status } = useSession();
   const context: any = useMainContext();
   const loading = status === "loading";
@@ -19,13 +19,13 @@ const useDuplicates = ({ enabled, permalink }) => {
       count: fetchParams.pageParam?.count ?? 0,
     };
     const res = await findDuplicates({
-      permalink: permalink, 
-      after: feedParams.after, 
-      count: feedParams.count, 
-      loggedIn: feedParams.loggedIn, 
-      token: context.token, 
+      permalink: permalink,
+      after: feedParams.after,
+      count: feedParams.count,
+      loggedIn: feedParams.loggedIn,
+      token: context.token,
       isPremium: premium?.isPremium
-    }); 
+    });
     const data = res?.res?.[1]?.data;
     const totalDuplicates =
       res?.res?.[0]?.data?.children?.[0]?.data?.num_duplicates;
@@ -51,14 +51,10 @@ const useDuplicates = ({ enabled, permalink }) => {
     };
   };
   const duplicateQuery = useInfiniteQuery(
-    ["duplicates", permalink],
-    fetchDuplicates,
     {
-      enabled: !!enabled && !!permalink,
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-      staleTime: Infinity,
-      // cacheTime: Infinity,
+      queryKey: ["duplicates", permalink],
+      queryFn: fetchDuplicates,
+      initialPageParam: { after: "", count: 0 },
       getNextPageParam: (lastPage) => {
         //console.log('lastPage?ß', lastPage)
         if (lastPage.after || lastPage.after === "") {
@@ -69,10 +65,11 @@ const useDuplicates = ({ enabled, permalink }) => {
         }
         return undefined;
       },
-      // setting initial data directly in fetchFeed() instead
-      // initialData: () => {
-      //   return formatInitialData();
-      // },
+
+      enabled: !!enabled && !!permalink,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      staleTime: Infinity,
     }
   );
   const flatPosts = duplicateQuery.data?.pages?.map((p) => p?.posts)?.flat();
