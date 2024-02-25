@@ -19,22 +19,27 @@ import { Analytics } from "@vercel/analytics/react";
 
 import toast, { Toaster } from "react-hot-toast";
 import NavBar from "../components/NavBar";
-import React, { useEffect, useRef } from "react";
-import packageInfo from "../../package.json";
+import { ReactNode, useEffect, useRef } from "react";
 import { checkVersion } from "../../lib/utils";
 import ToastCustom from "../components/toast/ToastCustom";
 import { usePlausible } from "next-plausible";
 import PremiumModal from "../components/PremiumModal";
 import RateLimitModal from "../components/RateLimitModal";
+import { trpc } from "../utils/trpc";
+import type { AppProps, AppType } from 'next/app';
+import { Session } from "next-auth";
 
 const NO_AUTH_FREE_ACCESS = JSON.parse(
   process?.env?.NEXT_PUBLIC_FREE_ACCESS ?? "true"
 );
 
-const VERSION = packageInfo.version;
+const VERSION = "0.1";
 const queryClient = new QueryClient();
 
-const App = ({ Component, pageProps }) => {
+type CustomProps = {
+  session: Session
+}
+const App: AppType = ({ Component, pageProps }: AppProps<CustomProps>) => {
   return (
     <SessionProvider session={pageProps.session}>
       <ThemeProvider defaultTheme="system">
@@ -42,13 +47,13 @@ const App = ({ Component, pageProps }) => {
           <MySubsProvider>
             <MyCollectionsProvider>
               <QueryClientProvider client={queryClient}>
-                <NavBar />
+                <NavBar/>
                 <Component {...pageProps} />
-                <PremiumModal />
-                <RateLimitModal />
-                <Toaster position="bottom-center" />
-                <Analytics />
-                <ReactQueryDevtools initialIsOpen={false} />
+                <PremiumModal/>
+                <RateLimitModal/>
+                <Toaster position="bottom-center"/>
+                <Analytics/>
+                <ReactQueryDevtools initialIsOpen={false}/>
               </QueryClientProvider>
             </MyCollectionsProvider>
           </MySubsProvider>
@@ -89,18 +94,18 @@ function MyApp({ Component, pageProps }) {
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover" //user-scalable="no"
         />
-        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="shortcut icon" href="/favicon.ico"/>
       </Head>
 
       {NO_AUTH_FREE_ACCESS ? (
         <PremiumAuthContextFreeProvider>
-          <App Component={Component} pageProps={pageProps} />
+          <App Component={Component} pageProps={pageProps}/>
         </PremiumAuthContextFreeProvider>
       ) : (
         <>
           <ClerkProvider {...pageProps}>
             <PremiumAuthContextProvider>
-              <App Component={Component} pageProps={pageProps} />
+              <App Component={Component} pageProps={pageProps}/>
             </PremiumAuthContextProvider>
           </ClerkProvider>
         </>
@@ -109,4 +114,5 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-export default MyApp;
+
+export default trpc.withTRPC(MyApp);
