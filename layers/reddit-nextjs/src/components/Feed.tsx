@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 import { useRouter } from "next/router";
 import { useMainContext } from "../MainContext";
@@ -19,7 +19,7 @@ const Feed = ({ initialData = {} as any }) => {
     initialPosts: initialData,
   });
 
-    console.log("Feed in Feed.tsx", feed);
+  console.log("Feed in Feed.tsx", feed);
   const { invalidateAll, invalidateKey, refreshCurrent, fetchingCount } =
     useRefresh();
 
@@ -73,7 +73,7 @@ const Feed = ({ initialData = {} as any }) => {
         >
           <p className="mb-2 text-center">{"Oops something went wrong :("}</p>
 
-          <ErrMessage />
+          <ErrMessage/>
         </button>
       ),
       { position: "bottom-center", duration: Infinity, id: "feed_error" }
@@ -84,7 +84,7 @@ const Feed = ({ initialData = {} as any }) => {
   }
   return (
     <>
-      <LoginModal />
+      <LoginModal/>
       <div className="flex flex-col items-center flex-none w-screen pt-1">
         <div
           className={

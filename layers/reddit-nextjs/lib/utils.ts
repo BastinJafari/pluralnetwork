@@ -1,10 +1,6 @@
-import {
-  localRead,
-  localSeen,
-  subredditFilters,
-  userFilters,
-} from "../src/MainContext";
 import { GalleryInfo, ImageInfo, MediaInfo, VideoInfo } from "../types";
+import { localRead, localSeen, subredditFilters, userFilters } from "../src/MainContext";
+
 
 const DOMAIN = "www.troddit.com";
 export const secondsToTime = (
@@ -91,10 +87,10 @@ export const checkVersion = (a, b) => {
 
 export function debounce(func, wait, immediate) {
   var timeout;
-  return function () {
+  return function() {
     var context = this,
       args = arguments;
-    var later = function () {
+    var later = function() {
       timeout = null;
       if (!immediate) func.apply(context, args);
     };
@@ -306,8 +302,8 @@ export const findMediaInfo = async (
       isLink = false;
     }
     let domainEnd = post?.url?.split("?")?.[0]?.split(".")?.[
-      post?.url?.split("?")?.[0]?.split(".")?.length - 1
-    ];
+    post?.url?.split("?")?.[0]?.split(".")?.length - 1
+      ];
     //console.log(domainEnd);
     if (
       (domainEnd === "jpg" || domainEnd === "png" || domainEnd === "gif") &&
@@ -586,7 +582,7 @@ export const findMediaInfo = async (
       img.src = src;
     });
   };
-  const stringToHTML = function (str) {
+  const stringToHTML = function(str) {
     let parser = new DOMParser();
     let doc = parser.parseFromString(str, "text/html");
     return doc.body.firstElementChild as Element;
@@ -734,9 +730,9 @@ export const filterPosts = async (
       filtercount += 1;
       return false;
     }
-    // else if (!galFilter && mediaInfo.isGallery) {
-    // filtercount += 1;
-    //   return false;
+      // else if (!galFilter && mediaInfo.isGallery) {
+      // filtercount += 1;
+      //   return false;
     // }
     else {
       return true;

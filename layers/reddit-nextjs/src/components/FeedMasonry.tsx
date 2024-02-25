@@ -17,7 +17,6 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { InView } from "react-intersection-observer";
 import Post from "./Post";
-import { findGreatestsImages } from "../../lib/utils";
 import useFeedPosts from "../hooks/useFeedPosts";
 import useHeightMap from "../hooks/useHeightMap";
 import useGlobalState from "../hooks/useGlobalState";
@@ -69,21 +68,21 @@ const FeedMasonry = ({ initItems, feed, curKey }: MyMasonicProps) => {
     context.cardStyle === "row1"
       ? 0
       : cols === 1
-      ? 8
-      : cols && cols > 1 && windowWidth < 640 //sm
-      ? cols === 2
         ? 8
-        : 0
-      : cols && cols > 3 && windowWidth < 1280 //xl
-      ? 4
-      : cols && cols > 3 && windowWidth > 1280 //xl
-      ? 8
-      : 8;
+        : cols && cols > 1 && windowWidth < 640 //sm
+          ? cols === 2
+            ? 8
+            : 0
+          : cols && cols > 3 && windowWidth < 1280 //xl
+            ? 4
+            : cols && cols > 3 && windowWidth > 1280 //xl
+              ? 8
+              : 8;
   const colWidth =
     context.cardStyle === "row1"
       ? width
       : (width - (cols ?? 0 > 1 ? gutter * (cols ? cols : 1) : 0)) /
-        (cols ? cols : 1);
+      (cols ? cols : 1);
   const positioner = usePositioner({
     width,
     columnGutter: gutter,
@@ -141,7 +140,8 @@ const FeedMasonry = ({ initItems, feed, curKey }: MyMasonicProps) => {
       setCols(1);
     }
 
-    return () => {};
+    return () => {
+    };
   }, [windowWidth, context.columnOverride, context.cardStyle]);
   useEffect(() => {
     context.setColumns(cols);
@@ -219,10 +219,10 @@ const FeedMasonry = ({ initItems, feed, curKey }: MyMasonicProps) => {
       ) {
         setGlobalData("lastScroll", post?.name);
         setGlobalData("lastClick", undefined);
-        if(context?.autoSeen){
+        if (context?.autoSeen) {
           localSeen.setItem(post?.name, { time: new Date() });
-        } 
-          
+        }
+
       }
       //context.cardStyle === "row1" && setGlobalData("lastTop", window.scrollY);
     },
@@ -268,7 +268,7 @@ const FeedMasonry = ({ initItems, feed, curKey }: MyMasonicProps) => {
       let mediaHeight = Math.min(
         post?.mediaInfo?.dimensions?.[1]
           ? (mediaWidth / post?.mediaInfo?.dimensions?.[0]) *
-              post?.mediaInfo?.dimensions?.[1]
+          post?.mediaInfo?.dimensions?.[1]
           : 0,
         maxHeight
       );
@@ -316,28 +316,28 @@ const FeedMasonry = ({ initItems, feed, curKey }: MyMasonicProps) => {
                 "relative " +
                 (scrolledTo
                   ? `${
-                      context.cardStyle !== "row1"
-                        ? " ring rounded-lg"
-                        : " ring-1 "
-                    } ring-th-accent z-10 `
+                    context.cardStyle !== "row1"
+                      ? " ring rounded-lg"
+                      : " ring-1 "
+                  } ring-th-accent z-10 `
                   : "")
               }
               style={
                 uniformMediaMode
                   ? {
-                      height: `${(mediaWidth * 16) / 9}px`,
-                    }
+                    height: `${(mediaWidth * 16) / 9}px`,
+                  }
                   : knownHeight && context.cardStyle !== "row1"
-                  ? {
+                    ? {
                       minHeight: `${knownHeight}px`,
                     }
-                  : mediaHeight > 0 && context.cardStyle !== "row1" && !linkMode
-                  ? {
-                      minHeight: `${mediaHeight}px`,
-                    }
-                  : {
-                      minHeight: `${80}px`,
-                    }
+                    : mediaHeight > 0 && context.cardStyle !== "row1" && !linkMode
+                      ? {
+                        minHeight: `${mediaHeight}px`,
+                      }
+                      : {
+                        minHeight: `${80}px`,
+                      }
               }
             >
               <Post
@@ -418,7 +418,7 @@ const FeedMasonry = ({ initItems, feed, curKey }: MyMasonicProps) => {
       )}
       <div className={"min-h-screen w-full"}>
         <MasonryScroller
-          itemKey={(data: Item, index) => {
+          itemKey={(data, index) => {
             return data?.data?.name ?? index;
           }}
           key={masonicKey}
@@ -460,7 +460,7 @@ const FeedMasonry = ({ initItems, feed, curKey }: MyMasonicProps) => {
             <div className="flex flex-col items-center justify-center w-full gap-2 text-center">
               <span>Loading page {(feed?.data?.pages?.length ?? 0) + 1} </span>
               <div className="opacity-80 text-th-accent">
-                <Spinner size={20} />
+                <Spinner size={20}/>
               </div>
             </div>
           )}

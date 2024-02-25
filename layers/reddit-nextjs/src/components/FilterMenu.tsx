@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect, useMemo } from "react";
+import { Fragment, useState, useEffect, useMemo } from "react";
 import { FiFilter } from "react-icons/fi";
 import { useMainContext } from "../MainContext";
 import FilterModal from "./FilterModal";
@@ -58,7 +58,7 @@ const FilterMenu = ({ hide = false }) => {
 
   return (
     <>
-      <FilterModal toOpen={openFilter} />
+      <FilterModal toOpen={openFilter}/>
       <button
         aria-label="filters"
         title={"filters"}

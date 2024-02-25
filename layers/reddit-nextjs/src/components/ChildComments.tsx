@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import { useMainContext } from "../MainContext";
 import CommentReply from "./CommentReply";
-import { secondsToTime } from "../../lib/utils";
 import Link from "next/link";
 import Vote from "./Vote";
 import Awardings from "./Awardings";
@@ -13,16 +12,18 @@ import Image from "next/legacy/image";
 import { BsArrowRightShort } from "react-icons/bs";
 import useMutate from "../hooks/useMutate";
 import { useWindowSize } from "@react-hook/window-size";
+import { secondsToTime } from "../../lib/utils";
+
 const ChildComments = ({
-  comment,
-  readTime,
-  depth,
-  hide,
-  op = "",
-  portraitMode = false,
-  locked = false,
-  scoreHideMins = 0,
-}) => {
+                         comment,
+                         readTime,
+                         depth,
+                         hide,
+                         op = "",
+                         portraitMode = false,
+                         locked = false,
+                         scoreHideMins = 0,
+                       }) => {
   const context: any = useMainContext();
   const { commentCollapse, loadCommentsMutation, commentDelete } = useMutate();
   const { data: session, status } = useSession();
@@ -38,7 +39,7 @@ const ChildComments = ({
   const [moreLoaded, setMoreLoaded] = useState(false);
   const [loadingComments, setLoadingComments] = useState(false);
   const [hideChildren, setHideChildren] = useState(
-   ((comment?.data?.collapsed ?? false) && context.autoCollapseComments)
+    ((comment?.data?.collapsed ?? false) && context.autoCollapseComments)
   );
 
   const toggleHidden = (override?) => {
@@ -219,8 +220,8 @@ const ChildComments = ({
         (depth == 0
           ? " bg-th-backgroundComment border-r "
           : depth % 2 === 0
-          ? " bg-th-backgroundComment "
-          : "bg-th-backgroundCommentAlternate ") +
+            ? " bg-th-backgroundComment "
+            : "bg-th-backgroundCommentAlternate ") +
         (hide ? " hidden " : "") +
         (isNew ? " bg-th-highlight " : " ") +
         " border-t border-l border-l-transparent  border-b border-th-border2 rounded-md"
@@ -265,8 +266,8 @@ const ChildComments = ({
             (hideChildren && !context.collapseChildrenOnly && !portraitMode
               ? " md:pl-0 mb-3 "
               : hideChildren && !context.collapseChildrenOnly
-              ? " mb-3 "
-              : " ")
+                ? " mb-3 "
+                : " ")
           }
           onClick={(e) => {
             e.stopPropagation();
@@ -284,8 +285,8 @@ const ChildComments = ({
                 <a
                   onClick={(e) => {
                     e.stopPropagation();
-                    if(comment?.data?.author === "[deleted]"){
-                      e.preventDefault(); 
+                    if (comment?.data?.author === "[deleted]") {
+                      e.preventDefault();
                     }
                   }}
                   className={
@@ -306,7 +307,8 @@ const ChildComments = ({
                     </div>
                   ) : (
                     context.showUserIcons && (
-                      <div className="flex items-center mr-0.5 justify-center w-6 h-6 border-2 rounded-full overflow-hidden bg-th-accent">
+                      <div
+                        className="flex items-center mr-0.5 justify-center w-6 h-6 border-2 rounded-full overflow-hidden bg-th-accent">
                         <span className="text-xl ml-0.5 mb-1 text-white">
                           u/
                         </span>
@@ -323,7 +325,7 @@ const ChildComments = ({
                     {comment?.data?.author_flair_text?.length > 0 &&
                       context.showUserFlairs && (
                         <span className="ml-2 mr-0.5 text-xs">
-                          <UserFlair post={comment.data} />
+                          <UserFlair post={comment.data}/>
                         </span>
                       )}
                   </h1>
@@ -402,9 +404,9 @@ const ChildComments = ({
                       comment?.data?.likes === 1
                         ? " text-th-upvote "
                         : comment?.data?.likes === false ||
-                          comment?.data?.likes === -1
-                        ? " text-th-downvote "
-                        : "")
+                        comment?.data?.likes === -1
+                          ? " text-th-downvote "
+                          : "")
                     }
                   >
                     {voteScore}
@@ -464,7 +466,7 @@ const ChildComments = ({
                   }}
                   className="py-2 ml-2 mr-4 "
                 >
-                  <ParseBodyHTML html={commentBodyHTML} />
+                  <ParseBodyHTML html={commentBodyHTML}/>
                 </div>
               )}
 
@@ -722,7 +724,7 @@ const ChildComments = ({
                                       onMouseLeave={() => setHovered(false)}
                                       onClick={(e) => e.stopPropagation()}
                                     >
-                                      Continue thread <BsArrowRightShort />
+                                      Continue thread <BsArrowRightShort/>
                                     </a>
                                   </Link>
                                 )}

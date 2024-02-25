@@ -1,7 +1,21 @@
 {
+  "name": "plural-network",
   "private": true,
-  "workspaces": [
-    "telegram-react",
-    "reddit-nextjs"
-  ]
+  "workspaces": {
+    "packages": [
+      "layers/*"
+    ],
+    "nohoist": [
+      "**/react",
+      "**/react-dom"
+    ]
+  },
+  "nohoist": [
+    "**/react",
+    "**/react-dom",
+    "babel-loader"
+  ],
+  "scripts": {
+    "reset": "find . -type dir -name node_modules | xargs rm -rf && rm -rf yarn.lock"
+  }
 }
