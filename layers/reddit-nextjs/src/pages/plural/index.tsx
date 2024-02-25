@@ -8,6 +8,8 @@ export const PluralFrontPage = () => {
   //   subReddit: 'plural_network_test',
   // });
 
+  console.log('end then plural')
+
 
   const helloQuery = trpc.greeting.useQuery({ name: 'asdf' })
   console.log('hello', helloQuery.isSuccess, helloQuery)

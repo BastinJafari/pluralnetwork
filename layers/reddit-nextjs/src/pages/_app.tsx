@@ -28,6 +28,7 @@ import RateLimitModal from "../components/RateLimitModal";
 import { trpc } from "../utils/trpc";
 import type { AppProps, AppType } from 'next/app';
 import { Session } from "next-auth";
+import { useRouter } from 'next/router'
 
 const NO_AUTH_FREE_ACCESS = JSON.parse(
   process?.env?.NEXT_PUBLIC_FREE_ACCESS ?? "true"
@@ -40,6 +41,16 @@ type CustomProps = {
   session: Session
 }
 const App: AppType = ({ Component, pageProps }: AppProps<CustomProps>) => {
+  console.log('and then app')
+  console.log(pageProps)
+
+  const router = useRouter()
+  console.log(router.pathname)
+  if (router.pathname === "/plural") {
+
+    return (<Component props={pageProps}/>)
+  }
+
   return (
     <SessionProvider session={pageProps.session}>
       <ThemeProvider defaultTheme="system">
