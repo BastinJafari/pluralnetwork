@@ -2,10 +2,12 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { useMainContext } from '../MainContext';
+import { useFeedParams } from "./useFeed";
 
-const useLocation = (params?) => {
+const useLocation = (params: useFeedParams) => {
   const [ready, setReady] = useState(false);
   const [domain, setDomain] = useState<string>();
+  const [subReddit, setSubReddit] = useState<string | undefined>(params?.subReddit);
   const { data: session, status } = useSession();
   const sessloading = status === "loading";
   const router = useRouter();
@@ -33,6 +35,7 @@ const useLocation = (params?) => {
     imgPortraitFilter: true,
     imgLandscapeFilter: true,
   });
+
 
   useEffect(() => {
     const domain = window?.location?.hostname ?? 'www.troddit.com'
@@ -168,8 +171,44 @@ const useLocation = (params?) => {
   }, [router, sessloading]);
 
   //monitor keys to control query
-  const [key, setKey] = useState<any[]>([params?.boardId ?? "none"]);
+  const [key, setKey] = useState<any[]>(["none"]);
   useEffect(() => {
+    console.log('useEffect triggered')
+    console.log('subReddit', subReddit)
+    const {
+      seenFilter,
+      readFilter,
+      imgFilter,
+      vidFilter,
+      selfFilter,
+      galFilter,
+      linkFilter,
+      imgPortraitFilter,
+      imgLandscapeFilter,
+    } = filters;
+    //force unique strings on filter change.. nested objects don't do the trick with masonic
+    const filtersString = [
+      seenFilter,
+      readFilter,
+      imgFilter,
+      vidFilter,
+      selfFilter,
+      galFilter,
+      linkFilter,
+      imgPortraitFilter,
+      imgLandscapeFilter,
+      context.filtersApplied,
+    ].join(",");
+    const sessStatus = status === "authenticated" ? session.user?.name : status
+    if (subReddit !== undefined) {
+      console.log('params.subReddit', params.subReddit)
+      setKey(["feed", "SUBREDDIT", params.subReddit, "hot", "", sessStatus, filtersString, filters]);
+
+      setReady(true);
+      setMode("SUBREDDIT");
+      setSort("hot");
+      setRange("");
+    }
     if (
       !sessloading &&
       context.ready &&
@@ -181,32 +220,8 @@ const useLocation = (params?) => {
     ) {
       //console.log("SAFESEARCH?", params?.safeSearch);
       //console.log("FILTERS??", filters);
-      const {
-        seenFilter,
-        readFilter,
-        imgFilter,
-        vidFilter,
-        selfFilter,
-        galFilter,
-        linkFilter,
-        imgPortraitFilter,
-        imgLandscapeFilter,
-      } = filters;
-      //force unique strings on filter change.. nested objects don't do the trick with masonic
-      const filtersString = [
-        seenFilter,
-        readFilter,
-        imgFilter,
-        vidFilter,
-        selfFilter,
-        galFilter,
-        linkFilter,
-        imgPortraitFilter,
-        imgLandscapeFilter,
-        context.filtersApplied,
-      ].join(",");
 
-      const sessStatus = status === "authenticated" ? session.user?.name : status
+      console.log('mode', mode)
 
       if (mode === "MULTI") {
         setKey([
@@ -301,6 +316,7 @@ const useLocation = (params?) => {
     sessloading,
     context.userPostType,
     filters,
+    subReddit,
   ]);
 
   return {
