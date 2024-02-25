@@ -2,6 +2,8 @@
 
 # dependencies
 /node_modules
+/reddit-nextjs/node_modules
+/telegram-react/node_modules
 /.pnp
 .pnp.js
 
