@@ -2,8 +2,9 @@
 
 # dependencies
 /node_modules
-/reddit-nextjs/node_modules
-/telegram-react/node_modules
+/layers/reddit-nextjs/node_modules
+/layers/reddit-nextjs/reddit-nextjs
+/layers/telegram-react/node_modules
 /.pnp
 .pnp.js
 
@@ -53,3 +54,5 @@ yarn-error.log*
 .secrets
 
 /.idea
+/layers/reddit-nextjs
+/layers/gramjs
