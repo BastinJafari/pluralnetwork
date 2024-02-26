@@ -100,7 +100,7 @@ export default function MyApp({ Component, pageProps }): AppProps {
 
   return (
     <>
-      <Script defer data-domain={"troddit.com"} src="/js/script.js"></Script>
+      <Script defer data-domain={"plural-network"} src="/js/script.js"></Script>
 
       <Head>
         <meta

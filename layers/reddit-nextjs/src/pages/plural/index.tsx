@@ -12,14 +12,14 @@ export const PluralFrontPage = () => {
   const [password, setPassword] = useState("1991")
   const [phoneCode, setPhoneCode] = useState(null)
 
-  //
-  // const sendCodeQuery = trpc.telegram.sendCode.useQuery({
-  //   phoneNumber,
-  //   password,
-  //   phoneCode: phoneCode,
-  // }, {
-  //   enabled: false
-  // })
+
+  const sendCodeQuery = trpc.telegram.sendCode.useQuery({
+    phoneNumber,
+    password,
+    phoneCode: phoneCode,
+  }, {
+    enabled: false
+  })
   const hellp = trpc.hello.useQuery({ textL: "there" })
   console.log(hellp)
   return (<>
@@ -38,7 +38,7 @@ export const PluralFrontPage = () => {
         <h3>Phone Code</h3>
         <input type="text" value={phoneCode} onChange={(e) => setPhoneCode(e.target.value)}/>
       </div>
-      {/*<button onClick={() => sendCodeQuery.refetch()}>Send Code</button>*/}
+      <button onClick={() => sendCodeQuery.refetch()}>Send Code</button>
 
     </>
   )

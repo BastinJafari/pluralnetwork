@@ -84,8 +84,7 @@
 //
 
 import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { Session } from "next-auth";
-import { getToken } from "next-auth/jwt"
+import { getToken, JWT } from "next-auth/jwt"
 import * as process from "process";
 
 /**
@@ -93,7 +92,7 @@ import * as process from "process";
  * Add fields here that the inner context brings.
  */
 interface CreateInnerContextOptions extends Partial<CreateNextContextOptions> {
-  session: Session | null;
+  jwt: JWT | null;
 }
 
 /**
@@ -107,7 +106,7 @@ interface CreateInnerContextOptions extends Partial<CreateNextContextOptions> {
  */
 export async function createContextInner(opts?: CreateInnerContextOptions) {
   return {
-    session: opts?.session
+    jwt: opts?.jwt
   };
 }
 

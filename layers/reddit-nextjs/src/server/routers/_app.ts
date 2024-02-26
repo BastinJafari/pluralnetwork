@@ -1,5 +1,9 @@
 import { trpcServer } from "../trpcInstance";
-import { hello } from "./telegram";
+import { Context } from "../context";
+import * as jwt from "jsonwebtoken";
+import { TRPCError } from "@trpc/server";
+import { initTRPC } from "@trpc/server";
+import { telegram } from "./telegram";
 
 /**
  * This file contains the root router of your tRPC-backend
@@ -19,7 +23,9 @@ import { hello } from "./telegram";
 
 
 export const appRouter = trpcServer.router({
-  hello,
+  telegram
 });
 
 export type AppRouter = typeof appRouter;
+
+
