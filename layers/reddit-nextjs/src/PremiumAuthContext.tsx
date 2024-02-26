@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
-import jwt_decode from "jwt-decode";
+import * as jwt from "jsonwebtoken";
+// @ts-ignore-all
 
 type useAuthReturn = ReturnType<typeof useAuth>;
 type premiumInfo = {
@@ -28,6 +29,7 @@ export const PremiumAuthContext = createContext<
 
 export const PremiumAuthContextProvider = (props: { [prop: string]: any }) => {
   const auth = useAuth();
+  // @ts-ignore
   const [premiumInfo, setPremiumInfo] = useState<premiumInfo>(() =>
     FREE_USE ? { isPremium: true } : undefined
   );
@@ -35,10 +37,13 @@ export const PremiumAuthContextProvider = (props: { [prop: string]: any }) => {
     if (auth.isLoaded) {
       auth.getToken({ template: "withPublicMetadata" }).then((token) => {
         if (token) {
-          const decoded = jwt_decode(token);
-          const isPremium = JSON.parse(
+          const decoded = jwt.verify(token, "asssdfas");
+          // @ts-ignore
+          const isPremium = JSON.parse(          // @ts-ignore
+
             decoded?.["pmd"]?.["isPremium"] ?? "false"
-          );
+          );          // @ts-ignore
+
           const expires = new Date(decoded?.["pmd"]?.["expires"] ?? "0");
 
           setPremiumInfo({

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ROUTES_TYPES } from "../../../../types/logs";
+import { Routes } from "../../../../types/logs";
 import { createClient } from "@supabase/supabase-js";
+
 const LOG_REQUESTS = JSON.parse(
   process?.env?.NEXT_PUBLIC_ENABLE_API_LOG ?? "false"
 );
@@ -15,7 +16,7 @@ const handler = async (request: NextRequest) => {
   //console.log("B?", body);
   const route_type = body?.route_type;
   if (
-    !Object.values(ROUTES_TYPES).includes(route_type) ||
+    !Routes.parse(route_type) ||
     !(typeof body?.is_oauth === "boolean")
   ) {
     return new NextResponse(undefined, {
