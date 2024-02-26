@@ -1,7 +1,5 @@
-import { useTAuth } from "../../PremiumAuthContext";
-import useFeed from "../../hooks/useFeed";
-import { trpc } from "../../utils/trpc";
 import { useState } from "react";
+import { trpc } from "../../utils";
 
 export const PluralFrontPage = () => {
   // const user = useTAuth();
@@ -14,16 +12,16 @@ export const PluralFrontPage = () => {
   const [password, setPassword] = useState("1991")
   const [phoneCode, setPhoneCode] = useState(null)
 
-
-  const sendCodeQuery = trpc.telegram.sendCode.useQuery({
-    phoneNumber,
-    password,
-    phoneCode: phoneCode,
-  }, {
-    enabled: false
-  })
-  console.log(window)
-
+  //
+  // const sendCodeQuery = trpc.telegram.sendCode.useQuery({
+  //   phoneNumber,
+  //   password,
+  //   phoneCode: phoneCode,
+  // }, {
+  //   enabled: false
+  // })
+  const hellp = trpc.hello.useQuery({ textL: "there" })
+  console.log(hellp)
   return (<>
       <h1 className={'text-2xl'}>Plural Network</h1>
       <h2>Telegram</h2>
@@ -40,7 +38,7 @@ export const PluralFrontPage = () => {
         <h3>Phone Code</h3>
         <input type="text" value={phoneCode} onChange={(e) => setPhoneCode(e.target.value)}/>
       </div>
-      <button onClick={() => sendCodeQuery.refetch()}>Send Code</button>
+      {/*<button onClick={() => sendCodeQuery.refetch()}>Send Code</button>*/}
 
     </>
   )

@@ -7,7 +7,7 @@ import {
   PremiumAuthContextProvider,
   PremiumAuthContextFreeProvider,
 } from "../PremiumAuthContext";
-import { MainProvider, localSeen } from "../MainContext";
+import { MainProvider } from "../MainContext";
 import { MySubsProvider } from "../MySubs";
 import { MyCollectionsProvider } from "../components/collections/CollectionContext";
 
@@ -17,18 +17,17 @@ import Script from "next/script";
 import Head from "next/head";
 import { Analytics } from "@vercel/analytics/react";
 
-import toast, { Toaster } from "react-hot-toast";
 import NavBar from "../components/NavBar";
-import { ReactNode, useEffect, useRef } from "react";
+import { useEffect, } from "react";
 import { checkVersion } from "../../lib/utils";
-import ToastCustom from "../components/toast/ToastCustom";
 import { usePlausible } from "next-plausible";
 import PremiumModal from "../components/PremiumModal";
 import RateLimitModal from "../components/RateLimitModal";
-import { trpc } from "../utils/trpc";
 import type { AppProps, AppType } from 'next/app';
 import { Session } from "next-auth";
 import { useRouter } from 'next/router'
+import { trpc } from "../utils";
+import { Toaster } from "react-hot-toast";
 
 const NO_AUTH_FREE_ACCESS = JSON.parse(
   process?.env?.NEXT_PUBLIC_FREE_ACCESS ?? "true"
@@ -74,7 +73,9 @@ const App: AppType = ({ Component, pageProps }: AppProps<CustomProps>) => {
   );
 };
 
-function MyApp({ Component, pageProps }) {
+const AppWithTRPC = trpc.withTRPC(App);
+
+export default function MyApp({ Component, pageProps }): AppProps {
   const plausible = usePlausible();
   useEffect(() => {
     const curVersion = VERSION;
@@ -96,6 +97,7 @@ function MyApp({ Component, pageProps }) {
     }
     localStorage.setItem("trodditVersion", curVersion);
   }, []);
+
   return (
     <>
       <Script defer data-domain={"troddit.com"} src="/js/script.js"></Script>
@@ -110,13 +112,13 @@ function MyApp({ Component, pageProps }) {
 
       {NO_AUTH_FREE_ACCESS ? (
         <PremiumAuthContextFreeProvider>
-          <App Component={Component} pageProps={pageProps}/>
+          <AppWithTRPC Component={Component} pageProps={pageProps}/>
         </PremiumAuthContextFreeProvider>
       ) : (
         <>
           <ClerkProvider {...pageProps}>
             <PremiumAuthContextProvider>
-              <App Component={Component} pageProps={pageProps}/>
+              <AppWithTRPC Component={Component} pageProps={pageProps}/>
             </PremiumAuthContextProvider>
           </ClerkProvider>
         </>
@@ -124,6 +126,3 @@ function MyApp({ Component, pageProps }) {
     </>
   );
 }
-
-
-export default trpc.withTRPC(MyApp);

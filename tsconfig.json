@@ -29,17 +29,11 @@
     ],
     "strict": true,
     "paths": {
-      "@project/ui": [
-        "../ui/src"
+      "@plural/reddit": [
+        "../layers/reddit/src"
       ],
-      "@project/ui/*": [
-        "../ui/src/*"
-      ],
-      "@project/utils": [
-        "../utils/src"
-      ],
-      "@project/utils/*": [
-        "../utils/src/*"
+      "@plural/telegram*": [
+        "../layers/gramjs/src*"
       ]
     }
   }

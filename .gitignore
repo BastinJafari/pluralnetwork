@@ -54,5 +54,6 @@ yarn-error.log*
 .secrets
 
 /.idea
-/layers/reddit-nextjs
 /layers/gramjs
+**/.next
+

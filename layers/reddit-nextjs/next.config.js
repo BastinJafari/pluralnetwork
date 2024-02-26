@@ -17,14 +17,6 @@ module.exports = withPlausibleProxy()(
         },
         experimental: {
             scrollRestoration: true,
-            swcPlugins: [
-                [
-                    'next-superjson-plugin',
-                    {
-                        excluded: [],
-                    },
-                ],
-            ],
         },
         async redirects() {
             return [
