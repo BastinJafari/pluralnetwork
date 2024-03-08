@@ -1,5 +1,5 @@
 {
-  "name": "plural-network",
+  "name": "plural-framework",
   "private": true,
   "workspaces": {
     "packages": [
